@@ -1,8 +1,13 @@
 import { useState } from "react";
 import styled from "styled-components";
-
+import Header from "../components/Header";
+import axios from "axios";
+import { navigateToAdmin } from "../routes/coordinator";
+import { useNavigate } from "react-router-dom";
 
 function LoginPage() {
+
+    const navigate = useNavigate() //hook do react-router-dom que faz a navegação entre páginas
     
     const [form, setForm] = useState({ email: "", senha: "" });
 
@@ -11,9 +16,29 @@ function LoginPage() {
         setForm({ ...form, [name]: value });
     };
 
+    const login = async () => {
+        //Pega as informações dos inputs controlados e envia para a API
+        const body = {
+            email: form.email,
+            password: form.senha
+        }
+
+        try {
+            const response = await axios.post(`https://us-central1-labenu-apis.cloudfunctions.net/labeX/kieffer-barbosa/login`, body)
+            console.log(response.data.token)
+            localStorage.setItem("token", response.data.token) //Envia o token para o localStoragre
+            navigateToAdmin(navigate) //Função que usa o navigate para levar o usuário diretamente para a página do admin
+            
+        } catch (error) {
+            console.log(error.message)
+        }
+    }
+
+
     const submitForm = (event) => {
         event.preventDefault();
         console.log(form);
+        login()
        
     };
     return (

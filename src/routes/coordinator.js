@@ -11,3 +11,6 @@ export const navigateToLogin = (navigate) => {
 export const navigateToCrate = (navigate) => {
   navigate("/create");
 };
+export const navigateToCreateTrip = (navigate) => {
+  navigate("/criar")
+}
